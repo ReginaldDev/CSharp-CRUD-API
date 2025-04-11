@@ -1,55 +1,63 @@
-Markdown
-
 # 📦 Projeto CRUD com API .NET e SQL Server + Cliente Terminal C#
 
-Este projeto é um CRUD simples utilizando **ASP.NET Core Web API** no backend e um cliente de terminal (console) em C# para consumo da API. O banco de dados utilizado é o **SQL Server**, e a comunicação é feita com o **Entity Framework Core (EF Core)**.
+Este projeto demonstra a implementação de um sistema **CRUD (Create, Read, Update, Delete)** utilizando **ASP.NET Core Web API** no backend, com um cliente de terminal (console) em **C#** para consumo da API. O banco de dados utilizado é o **SQL Server**, com acesso via **Entity Framework Core (EF Core)**.
 
 ---
 
 ## 🗂 Estrutura do Projeto
 
-```text
+```
 ApiCadastroProdutos/
 ├── Controllers/
-│   └── ProdutoController.cs      # Controller da API para gerenciar produtos
+│   └── ProdutoController.cs            # Controller da API para gerenciar produtos
 ├── Data/
-│   └── ProdutoDbContext.cs       # Contexto do Entity Framework Core para interação com o banco
+│   └── ProdutoDbContext.cs             # Contexto do EF Core para interação com o banco
 ├── Models/
-│   └── Produto.cs                # Modelo de dados da tabela Produtos
-├── Migrations/                   # Arquivos de migration do EF Core para o banco de dados
+│   └── Produto.cs                      # Modelo de dados da tabela Produtos
+├── Migrations/                         # Arquivos de migration do EF Core
 │   ├── [timestamp]_InitialCreate.cs
 │   └── ProdutoDbContextModelSnapshot.cs
 ├── Properties/
-│   └── launchSettings.json       # Configurações de execução da API
-├── appsettings.Development.json  # Configurações da aplicação para desenvolvimento
-├── appsettings.json              # Configurações da aplicação
-├── ApiCadastroProdutos.csproj    # Arquivo de projeto da API
-├── Program.cs                    # Ponto de entrada principal da API
+│   └── launchSettings.json             # Configurações de execução da API
+├── appsettings.Development.json        # Configurações de desenvolvimento
+├── appsettings.json                    # Configurações gerais da aplicação
+├── ApiCadastroProdutos.csproj          # Arquivo de projeto da API
+├── Program.cs                          # Ponto de entrada da aplicação
 └── ...
 
 TerminalCadastroProdutos/
-├── Program.cs                    # Script cliente que consome a API via terminal
-├── TerminalCadastroProdutos.csproj # Arquivo de projeto do cliente terminal
-├── Produto.cs                    # Modelo de dados local para comunicação com a API
+├── Program.cs                          # Cliente que consome a API via terminal
+├── TerminalCadastroProdutos.csproj     # Arquivo de projeto do cliente terminal
+├── Produto.cs                          # Modelo local para comunicação com a API
 └── ...
 
-README.md                         # Este arquivo
-🧱 Criação da Tabela SQL
-O Entity Framework Core irá criar a tabela Produtos automaticamente com base no modelo Models/Produto.cs através das Migrations. No entanto, certifique-se de ter um banco de dados chamado CadastroDeProdutos configurado no seu SQL Server. A estrutura da tabela Produtos será semelhante a:
+README.md                               # Este arquivo
+```
 
-SQL
+---
 
+## 🧱 Criação da Tabela no SQL Server
+
+O **EF Core** criará a tabela `Produtos` automaticamente com base no modelo `Produto.cs`. Certifique-se de ter um banco chamado `CadastroDeProdutos` criado no SQL Server.
+
+### Estrutura da Tabela `Produtos`:
+
+```sql
 CREATE TABLE Produtos (
     Id INT IDENTITY(1,1) PRIMARY KEY,
     Nome NVARCHAR(MAX) NOT NULL,
     Descricao NVARCHAR(MAX) NOT NULL,
     Preco DECIMAL(18, 2) NOT NULL
 );
-⚙️ Configurando a Conexão com o Banco de Dados
-Edite o arquivo appsettings.json (ou appsettings.Development.json para ambiente de desenvolvimento) dentro da pasta ApiCadastroProdutos e altere a seção ConnectionStrings com as informações do seu ambiente SQL Server:
+```
 
-JSON
+---
 
+## ⚙️ Configuração da Conexão com o Banco de Dados
+
+Altere o arquivo `appsettings.json` ou `appsettings.Development.json`:
+
+```json
 {
   "Logging": {
     "LogLevel": {
@@ -62,51 +70,82 @@ JSON
     "DefaultConnection": "Server=SEU_SERVIDOR;Database=CadastroDeProdutos;User ID=SEU_USUARIO;Password=SUA_SENHA;TrustServerCertificate=True"
   }
 }
-💡 Dica: Substitua SEU_SERVIDOR, CadastroDeProdutos, SEU_USUARIO e SUA_SENHA pelas suas credenciais e nome do servidor. Para autenticação do Windows, use Integrated Security=True;.
+```
 
-▶️ Passos para Rodar o Projeto
-1. Navegue até a pasta da API
-Bash
+> 💡 Dica: Para autenticação do Windows, utilize:  
+> `"DefaultConnection": "Server=SEU_SERVIDOR;Database=CadastroDeProdutos;Integrated Security=True;"`
 
+---
+
+## ▶️ Como Rodar o Projeto
+
+### 1. Navegue até a pasta da API
+
+```bash
 cd ApiCadastroProdutos
-2. Execute as Migrations (para criar o banco de dados e a tabela)
-Bash
+```
 
+### 2. Execute as Migrations (criação do banco e da tabela)
+
+```bash
 dotnet ef database update
-⚠️ Certifique-se de ter as ferramentas do Entity Framework Core instaladas (dotnet tool install --global dotnet-ef).
+```
 
-3. Inicie a API
-Rode o seguinte comando na pasta ApiCadastroProdutos:
+> ⚠️ Certifique-se de ter o EF Core instalado:  
+> `dotnet tool install --global dotnet-ef`
 
-Bash
+### 3. Inicie a API
 
+```bash
 dotnet run
+```
+
 A API estará disponível em:
-👉 http://localhost:[porta]/api/produto (a porta pode variar, verifique a saída do comando dotnet run).
+```
+http://localhost:[porta]/api/produto
+```
+> (A porta será exibida ao rodar o comando.)
 
-4. Navegue até a pasta do Cliente Terminal
-Abra um novo terminal e navegue até a pasta TerminalCadastroProdutos:
+### 4. Navegue até a pasta do Cliente Terminal
 
-Bash
-
+```bash
 cd TerminalCadastroProdutos
-5. Execute o cliente Python no terminal
-Rode o seguinte comando:
+```
 
-Bash
+### 5. Execute o Cliente Terminal
 
+```bash
 dotnet run
-Esse script permite interagir com a API diretamente pelo terminal, com opções para listar, buscar, criar, atualizar e remover produtos.
+```
 
-✅ Funcionalidades da API
-GET /api/produto – Listar todos os produtos
-GET /api/produto/{id} – Buscar produto por ID
-POST /api/produto – Criar novo produto (envie um objeto JSON no corpo da requisição)
-PUT /api/produto/{id} – Atualizar dados de um produto (envie um objeto JSON no corpo da requisição)
-DELETE /api/produto/{id} – Remover produto por ID
-💬 Suporte
-Se tiver dúvidas ou quiser expandir este projeto, sinta-se à vontade para perguntar!
+O cliente permite interagir com a API via terminal: listar, buscar, criar, atualizar e excluir produtos.
 
-📬 Contato
-[Seu Nome/Contato]
-[Seu Email/Outro Meio de Contato]
+---
+
+## ✅ Funcionalidades da API
+
+| Método | Rota                        | Descrição                          |
+|--------|-----------------------------|------------------------------------|
+| GET    | `/api/produto`              | Listar todos os produtos           |
+| GET    | `/api/produto/{id}`         | Buscar produto por ID              |
+| POST   | `/api/produto`              | Criar novo produto                 |
+| PUT    | `/api/produto/{id}`         | Atualizar produto existente        |
+| DELETE | `/api/produto/{id}`         | Remover produto por ID             |
+
+> Todos os métodos que enviam dados (POST/PUT) devem receber um objeto JSON com os campos: `Nome`, `Descricao`, `Preco`.
+
+---
+
+## 💬 Suporte
+
+Se tiver dúvidas, sugestões ou quiser expandir este projeto, fique à vontade para entrar em contato!
+
+---
+
+## 📬 Contato
+
+**Nome:** [Reginaldo Junior]  
+**Email:** [reginaldo.devtech@gmail.com]  
+**GitHub:** [github.com/ReginaldDev](https://github.com/ReginaldDev)
+
+---

@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "kPVkmv+8RzYG9QgnzeJBBNucueZgf/G6Wk6kq3mfD7I=",
+  "Source": "ApiCadastroProdutos",
+  "BasePath": "_content/ApiCadastroProdutos",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

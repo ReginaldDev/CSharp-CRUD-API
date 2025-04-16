@@ -1,7 +1,32 @@
 using ApiCadastroProdutos.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// 🔐 1. CONFIGURAÇÃO JWT
+
+// Recupera a chave secreta do appsettings.json
+var key = Encoding.ASCII.GetBytes(builder.Configuration["JwtSettings:SecretKey"]!);
+
+// Configura autenticação JWT
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+});
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -19,6 +44,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication();   // ⬅️ Valida o token JWT
+app.UseAuthorization();    // ⬅️ Controla acesso com base no token
+
 app.MapControllers();
 
 var summaries = new[]

@@ -2,11 +2,13 @@ using Microsoft.AspNetCore.Mvc;
 using ApiCadastroProdutos.Data;
 using ApiCadastroProdutos.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApiCadastroProdutos.Controllers
 {
     [ApiController]
     [Route("api/produto")]
+    [Authorize]
     public class ProdutoController : ControllerBase
     {
         private readonly ProdutoDbContext _context;
